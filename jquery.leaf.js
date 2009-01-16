@@ -11,7 +11,7 @@
 		'<div class="leaf">',
 		'<div class="image"/>',
 		'<div class="main">',
-		'<h5/>',
+		'<div class="title"/>',
 		'<ul class="creator"/>',
 		'<dl>',
 		'<dt>Price</dt><dd class="price"/>',
@@ -23,6 +23,7 @@
 		'</div>',
 		'</div>'
 	].join(''));
+	var loading = false;
 	var container = null;
 
 	var linkHTML = function(asin, content) {
@@ -31,26 +32,26 @@
 
 	var creatorHTML = function(attr) {
 		var creators = [];
-		var type = ['Author', 'Artist', 'Manufacturer', 'Publisher'];
+		var type = ['Author', 'Artist', 'Creator', 'Manufacturer', 'Publisher'];
 		$.each(type, function() {
 			var c = attr[this];
 			if (!c) return;
 			if (typeof c == 'string') c = [c];
 			creators = creators.concat(
-				$.grep(c, function(n) {
-					return ($.inArray(n, creators) == -1);
+				$.grep(
+					$.map(c, function(n) {
+						return (n.content || n)
+							.replace(/&/g, '&amp;')
+							.replace(/"/g, '&quot;')
+							.replace(/</g, '&lt;')
+							.replace(/>/g, '&gt;');
+					}),
+					function(n) {
+						return ($.inArray(n, creators) == -1);
 				})
 			);
 		});
-		creators = creators.length ?
-			$.map(creators, function(n) {
-				return n
-					.replace(/&/g, '&amp;')
-					.replace(/"/g, '&quot;')
-					.replace(/</g, '&lt;')
-					.replace(/>/g, '&gt;');
-			}).join('</li><li>') :
-			'-';
+		creators = creators.join('</li><li>') || '-';
 		return '<li>'+creators+'</li>';
 	};
 
@@ -59,6 +60,8 @@
 	};
 
 	$.fn.leaf = function(callback) {
+		if (loading) return;
+		loading = true;
 		if (!container) container = $('<div id="leaf"/>').appendTo('body');
 
 		return this.each(function() {
@@ -69,11 +72,13 @@
 
 			var a = $(this), position = null;
 			a.mouseover(function() {
+				$('.leaf', container).mouseout();
 				var leaf = $('#leaf-'+itemId);
 
 				if (leaf.length) {
 					setPosition();
 					leaf.show();
+					loading = false;
 				}
 				else {
 					var q = $.extend({}, queries, { ItemId: itemId });
@@ -99,7 +104,7 @@
 							.clone()
 							.attr('id', 'leaf-'+itemId)
 							.find('.image').html(image).end()
-							.find('h5').html(title).end()
+							.find('.title').html(title).end()
 							.find('.creator').html(creator).end()
 							.find('.price').text(price).end()
 							.find('.availability').text(availability).end()
@@ -114,6 +119,7 @@
 							setPosition();
 
 						if (callback) callback.call(leaf);
+						loading = false;
 					});
 				}
 
