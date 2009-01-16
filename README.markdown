@@ -2,7 +2,7 @@
 
 Show item attributes when the mouse pointer over the link to the Amazon.
 
-This plugin uses [Amazon ItemLookup Pipe](http://pipes.yahoo.com/pipes/pipe.edit?_id=DM6ru9_R3BGmxGU9xAnzeQ) on the Yahoo Pipes.
+This plugin uses [Amazon ItemLookup Pipe](http://pipes.yahoo.com/pipes/pipe.info?_id=DM6ru9_R3BGmxGU9xAnzeQ) on the Yahoo Pipes.
 
 ## Require
 	jQuery >= 1.2
