@@ -8,7 +8,7 @@
 	};
 	var asin = /ASIN\/([A-Z0-9]{10,13})/;
 	var template = $([
-		'<div class="item">',
+		'<div class="leaf">',
 		'<div class="image"/>',
 		'<div class="main">',
 		'<h5/>',
