@@ -23,7 +23,7 @@
 		'</div>',
 		'</div>'
 	].join(''));
-	var loading = false;
+	var loading = {};
 	var container = null;
 
 	var linkHTML = function(asin, content) {
@@ -60,8 +60,6 @@
 	};
 
 	$.fn.leaf = function(callback) {
-		if (loading) return;
-		loading = true;
 		if (!container) container = $('<div id="leaf"/>').appendTo('body');
 
 		return this.each(function() {
@@ -72,13 +70,15 @@
 
 			var a = $(this), position = null;
 			a.mouseover(function() {
+				if (loading[itemId]) return;
+				loading[itemId] = true;
+
 				$('.leaf', container).mouseout();
 				var leaf = $('#leaf-'+itemId);
-
 				if (leaf.length) {
-					setPosition();
+					leaf.css('top', position);
 					leaf.show();
-					loading = false;
+					loading[itemId] = false;
 				}
 				else {
 					var q = $.extend({}, queries, { ItemId: itemId });
@@ -116,16 +116,11 @@
 								if (!$(e.relatedTarget).parents('#leaf').length)
 									$(this).fadeOut('fast');
 							});
-							setPosition();
+							leaf.css('top', position = a.offset().top + a.height() / 2 - leaf.height() / 2);
 
 						if (callback) callback.call(leaf);
-						loading = false;
+						loading[itemId] = false;
 					});
-				}
-
-				function setPosition() {
-					position = position || a.offset().top + a.height() / 2 - leaf.height() / 2;
-					leaf.css('top', position);
 				}
 			});
 		});
