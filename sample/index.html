@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta http-equiv="content-style-type" content="text/css"/>
+<meta http-equiv="content-script-type" content="text/javascript"/>
+<title>jquery.leaf</title>
+<link rel="stylesheet" type="text/css" href="index.css"/>
+<link rel="stylesheet" type="text/css" href="leaf.css"/>
+<style type="text/css">
+.image li {
+	display: inline;
+}
+</style>
+</head>
+
+<body>
+<div class="head">
+	<h1>jquery.leaf</h1>
+	<p>Show item attributes when the mouse pointer over the link to the Amazon.</p>
+</div>
+
+<div class="section">
+	<h2>Text</h2>
+	<ul>
+		<li><a class="amazon" href="http://www.amazon.co.jp/o/ASIN/B00005GXRX/clothfairy-22/ref=nosim">Hotchpotch</a></li>
+		<li><a class="amazon" href="http://www.amazon.co.jp/o/ASIN/B00005LLFC/clothfairy-22/ref=nosim">イージーリスニング</a></li>
+	</ul>
+</div>
+<div class="section image">
+	<h2>Image</h2>
+	<ul>
+		<li><a class="amazon" href="http://www.amazon.co.jp/o/ASIN/B001IK935O/clothfairy-22/ref=nosim"><img src="http://ecx.images-amazon.com/images/I/51qz0OX-gYL._SL160_.jpg" alt="かぜよみ" width="160" height="158"/></a></li>
+		<li><a class="amazon" href="http://www.amazon.co.jp/o/ASIN/B001ELTXQQ/clothfairy-22/ref=nosim"><img src="http://ecx.images-amazon.com/images/I/51Vs4c4xcsL._SL160_.jpg" alt="雨が降る" width="140" height="160"/></a></li>
+		<li><a class="amazon" href="http://www.amazon.co.jp/o/ASIN/B0015DQFOQ/clothfairy-22/ref=nosim"><img src="http://ecx.images-amazon.com/images/I/419KjE16pDL._SL160_.jpg" alt="トライアングラー" width="141" height="160"/></a></li>
+	</ul>
+	<ul>
+		<li><a class="amazon" href="http://www.amazon.co.jp/o/ASIN/B000B84PIY/clothfairy-22/ref=nosim"><img src="http://ecx.images-amazon.com/images/I/41ZM7EGEB0L._SL160_.jpg" alt="夕凪LOOP" width="158" height="160"/></a></li>
+	</ul>
+</div>
+
+<div class="foot">
+	<p><a href="http://carbonfairy.org/">carbonfairy</a> | <a href="http://codefairy.org/">codefairy</a></p>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+<script type="text/javascript" src="../jquery.leaf.js"></script>
+<script type="text/javascript">
+$('<div id="loading"/>')
+	.hide()
+	.appendTo('body')
+	.ajaxStart(function() { $(this).show(); })
+	.ajaxComplete(function() { $(this).fadeOut(); });
+
+$('.amazon').leaf(function() {
+	var price = $('.price', this);
+	price.text(price.text().replace(/￥ /, '¥'));
+
+	var h = 0;
+	$(this).children()
+		.each(function() {
+			h = Math.max(h, $(this).height());
+		})
+		.height(h);
+});
+</script>
+</body>
+</html>
