@@ -24,3 +24,6 @@ jQuery >= 1.2.3
 	</script>
 
 Requires `/ASIN\/([A-Z0-9]{10,13})/` in Amazon URL.
+
+## ToDo
+- CSS' top value is doubtful
